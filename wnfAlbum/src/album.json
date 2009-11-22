@@ -1,0 +1,17 @@
+/* 
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/*
+1. Abfrage der Jahre
+URL: /q/jahre
+*/
+
+{"Album" : [
+        {"Jahr": 1958, "Text": "Uwe wurde geboren"},
+        {"Jahr": 1959, "Text": "Der beste Jahrgang"},
+        {"Jahr": 1660, "Text": "...."}
+    ]}
+
+

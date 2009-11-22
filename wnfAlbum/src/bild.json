@@ -1,0 +1,19 @@
+/* 
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/*
+ URL: /q/bild?datum='1958/19580410/bild1.jpg'
+
+bzw
+
+ URL: /q/bild?datum='1958/19580410'  für das 1.Bild
+
+*/
+
+{
+    "Bild": {"URL":"1958/19580410/bild3.jpg", "Text": '...', "Hoehe": 1050, "Breite": 1680},
+    "Pred": "1958/19580410/bild2.jpg",
+    "Next": "1958/19580410/bild4.jpg"
+}

@@ -1,0 +1,16 @@
+/* 
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/*
+2. Monat
+
+URL: /q/monat?jahr=1959
+
+*/
+
+{ "Monat": [
+        {"URL":'1958/19580403', "Datum": '03.04.1958', "Text": 'Der Schreck ist da..'},
+        {"URL":'1958/19580410', "Datum": '10.04.1958', "Text": 'Der Schreck lässt nach..'}
+            ]}
