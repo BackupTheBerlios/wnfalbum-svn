@@ -44,6 +44,10 @@
 			<DCCReference Include="wnfAlbum_testserver_main.pas">
 				<Form>Form1</Form>
 			</DCCReference>
+			<DCCReference Include="wnfAlbumMain.pas">
+				<Form>dmMain</Form>
+				<DesignClass>TDataModule</DesignClass>
+			</DCCReference>
 			<BuildConfiguration Include="Basis">
 				<Key>Base</Key>
 			</BuildConfiguration>

@@ -1,9 +1,10 @@
 object Form1: TForm1
   Left = 0
   Top = 0
-  Caption = 'Form1'
-  ClientHeight = 294
-  ClientWidth = 562
+  BorderStyle = bsToolWindow
+  Caption = 'Testserver wnfAlbum'
+  ClientHeight = 40
+  ClientWidth = 160
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -13,4 +14,13 @@ object Form1: TForm1
   OldCreateOrder = False
   PixelsPerInch = 96
   TextHeight = 13
+  object Button1: TButton
+    Left = 40
+    Top = 8
+    Width = 75
+    Height = 25
+    Caption = 'Ende'
+    TabOrder = 0
+    OnClick = Button1Click
+  end
 end
