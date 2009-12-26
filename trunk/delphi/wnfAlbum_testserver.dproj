@@ -48,6 +48,9 @@
 				<Form>dmMain</Form>
 				<DesignClass>TDataModule</DesignClass>
 			</DCCReference>
+			<DCCReference Include="wnfAlbumSetup.pas">
+				<Form>fmSetup</Form>
+			</DCCReference>
 			<BuildConfiguration Include="Basis">
 				<Key>Base</Key>
 			</BuildConfiguration>

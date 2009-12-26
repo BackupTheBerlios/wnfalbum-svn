@@ -3,7 +3,8 @@ program wnfAlbum_testserver;
 uses
   Forms,
   wnfAlbum_testserver_main in 'wnfAlbum_testserver_main.pas' {Form1},
-  wnfAlbumMain in 'wnfAlbumMain.pas' {dmMain: TDataModule};
+  wnfAlbumMain in 'wnfAlbumMain.pas' {dmMain: TDataModule},
+  wnfAlbumSetup in 'wnfAlbumSetup.pas' {fmSetup};
 
 {$R *.res}
 
