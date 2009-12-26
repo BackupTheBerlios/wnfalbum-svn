@@ -14,7 +14,7 @@ type
     procedure httpCommandGet(AContext: TIdContext;
       ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo);
   private
-    FHTML :TdspTemplateCache;
+    FHTML: TdspTemplateCache;
   public
     { Public-Deklarationen }
   end;
@@ -27,11 +27,15 @@ implementation
 {$R *.dfm}
 
 resourcestring
-  stError404='Seite nicht gefunden';
+  stError404 = 'Seite nicht gefunden';
 
 procedure TdmMain.DataModuleCreate(Sender: TObject);
+var
+  s: string;
 begin
-  FHTML:=TdspTemplateCache.Create(ExtractFilePath(Application.ExeName)+'www\');
+  s:=ExtractFilePath(Application.ExeName);
+  ForceDirectories(s+'cache\');
+    FHTML := TdspTemplateCache.Create(s + 'www\');
 end;
 
 procedure TdmMain.DataModuleDestroy(Sender: TObject);
@@ -39,23 +43,29 @@ begin
   FreeAndNil(FHTML);
 end;
 
-procedure TdmMain.httpCommandGet(AContext: TIdContext;  ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo);
+procedure TdmMain.httpCommandGet(AContext: TIdContext; ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo);
 var
-  s:string;
-  c :TdspFileCache;
+  s: string;
+  c: TdspFileCache;
 begin
-  s:= lowercase(ARequestInfo.Document);
-  c:=FHTML.Find(s);
-  if c<>nil then begin
-    AResponseInfo.ResponseNo:=200;
-    ARequestInfo.LastModified:=c.FileAge;
-    AResponseInfo.ContentStream:=c.UTF8Stream;
+  s := lowercase(ARequestInfo.Document);
+  if pos('/q/', s) = 1 then begin
+
   end
   else begin
-    AResponseInfo.ResponseNo := 404;
-    AResponseInfo.ContentText := stError404;
 
+    c := FHTML.Find(s);
+    if c <> nil then begin
+      AResponseInfo.ResponseNo := 200;
+      ARequestInfo.LastModified := c.FileAge;
+      AResponseInfo.ContentStream := c.UTF8Stream;
+    end
+    else begin
+      AResponseInfo.ResponseNo := 404;
+      AResponseInfo.ContentText := stError404;
+    end;
   end;
 end;
 
 end.
+
