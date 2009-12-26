@@ -1,0 +1,36 @@
+﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+		<PropertyGroup>
+			<ProjectGuid>{43D1614F-BD8E-4458-AE4D-023386222F0B}</ProjectGuid>
+		</PropertyGroup>
+		<ItemGroup>
+			<Projects Include="wnfAlbum_testserver.dproj">
+				<Dependencies/>
+			</Projects>
+		</ItemGroup>
+		<ProjectExtensions>
+			<Borland.Personality>Default.Personality.12</Borland.Personality>
+			<Borland.ProjectType/>
+			<BorlandProject>
+				<Default.Personality/>
+			</BorlandProject>
+		</ProjectExtensions>
+		<Target Name="wnfAlbum_testserver">
+			<MSBuild Projects="wnfAlbum_testserver.dproj"/>
+		</Target>
+		<Target Name="wnfAlbum_testserver:Clean">
+			<MSBuild Targets="Clean" Projects="wnfAlbum_testserver.dproj"/>
+		</Target>
+		<Target Name="wnfAlbum_testserver:Make">
+			<MSBuild Targets="Make" Projects="wnfAlbum_testserver.dproj"/>
+		</Target>
+		<Target Name="Build">
+			<CallTarget Targets="wnfAlbum_testserver"/>
+		</Target>
+		<Target Name="Clean">
+			<CallTarget Targets="wnfAlbum_testserver:Clean"/>
+		</Target>
+		<Target Name="Make">
+			<CallTarget Targets="wnfAlbum_testserver:Make"/>
+		</Target>
+		<Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+	</Project>
