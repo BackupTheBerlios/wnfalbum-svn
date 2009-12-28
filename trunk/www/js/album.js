@@ -71,8 +71,34 @@ function getTage(){
             Jahr: aktuJahr,
             Monat: aktuMonat
         }, function(antwort){
+            var s='';
+            var max=antwort.Tage.length -1;
+            for (var i in antwort.Tage)
+                if (i==max)
+                    s+='<option selected value="'+antwort.Tage[i].Verzeichnis+'">'+antwort.Tage[i].Name+'</option>';
+                else
+                    s+='<option value="'+antwort.Tage[i].Verzeichnis+'">'+antwort.Tage[i].Name+'</option>';
+            $('#tage').html(s).click(function(){
+                getBilder();
+            })
+            aktuTag='';
+            getBilder();
+
+        })
+    }
+}
+
+function getBilder(){
+    var s=$('#tage').val();
+    if (s!=aktuTag) {
+        aktuTag=s;
+        $.getJSON('q/bilder', {
+            Album: aktuAlbum,
+            Jahr: aktuJahr,
+            Monat: aktuMonat,
+            Tag: aktuTag
+        }, function(antwort){
 
             })
         }
-
 }

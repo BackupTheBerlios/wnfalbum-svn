@@ -32,7 +32,7 @@ implementation
 
 {$R *.dfm}
 
-uses dsp_ini, wnfAlbumSetup, wnfAlbumTools, dsp_tools;
+uses iniFiles, dsp_ini, wnfAlbumSetup, wnfAlbumTools, dsp_tools;
 
 resourcestring
   stError404 = 'Seite nicht gefunden';
@@ -45,7 +45,7 @@ var
   jahr: string;
   monat: string;
   L: TStrings;
-  s: string;
+  s, n: string;
   monate: array[1..12] of boolean;
 begin
   json.asString['URL'] := url;
@@ -59,10 +59,10 @@ begin
           asString['Name'] := FAlben[i].Name;
         end;
     end
-    else
+    else begin
+      pfad := IncludeTrailingPathDelimiter(FAlben[StrToIntDef(params.Values['Album'], 0)].Pfad);
       if url = 'jahre' then begin
         arr := json.asArray['Jahre'];
-        pfad := FAlben[StrToIntDef(params.Values['Album'], 0)].Pfad;
         L := getAllDir(pfad, '????');
         try
           for S in L do
@@ -72,13 +72,13 @@ begin
           L.Free;
         end;
       end
-      else
+      else begin
+        jahr := params.Values['Jahr'];
+        pfad := IncludeTrailingPathDelimiter(pfad+jahr);
         if url = 'monat' then begin
           arr := json.asArray['Monate'];
-          pfad := FAlben[StrToIntDef(params.Values['Album'], 0)].Pfad;
-          jahr := params.Values['Jahr'];
           FillChar(Monate, SizeOf(Monate), 0);
-          L := getAllDir(pfad + '\' + jahr, jahr + '*');
+          L := getAllDir(pfad, jahr + '*');
           try
             for S in L do begin
               i := StrToIntDef(Copy(s, 5, 2), 0);
@@ -95,24 +95,55 @@ begin
                 asString['Name'] := LongMonthNames[i];
               end;
         end
-        else
+        else begin
+          monat := params.Values['Monat'];
+          while length(monat) < 2 do monat := '0' + monat;
           if url = 'tage' then begin
-            arr := json.asArray['Monate'];
-            pfad := FAlben[StrToIntDef(params.Values['Album'], 0)].Pfad;
-            jahr := params.Values['Jahr'];
-            monat := params.Values['Monat'];
-            while length(monat) < 2 do monat := '0' + monat;
-            L := getAllDir(pfad + '\' + jahr, jahr + monat + '*');
+            arr := json.asArray['Tage'];
+            L := getAllDir(pfad, jahr + monat + '*');
             try
-          for S in L do
-              arr.AddObject.asString['Verzeichnis'] := s;
-
+              for S in L do
+                with arr.AddObject do begin
+                  n := copy(s, 7, 2) + ' - ';
+                  if FileExists(pfad+ s + '\' + 'album.dat') then begin
+                    with TIniFile.Create(pfad + s + '\' + 'album.dat') do
+                    try
+                      n := n + ReadString('Titel', 'Titelname', '');
+                    finally
+                      Free;
+                    end;
+                  end
+                  else
+                    if pos(' ', s) > 8 then
+                      n := n + copy(s, pos(' ', s) + 1, 255);
+                  asString['Name'] := n;
+                  asString['Verzeichnis'] := s;
+                end;
             finally
               L.Free;
             end;
+          end
+          else begin
+            pfad:=IncludeTrailingPathDelimiter(Pfad+params.Values['Tag']);
+            if url = 'bilder' then begin
+              arr := json.asArray['Bilder'];
+              L:=TStringList.Create;
+              try
+                (l as TStringList).Sorted:=true;
+                FindFiles(L,pfad,'*.jpg');
+              for S in L do
+                with arr.AddObject do begin
+                  asString['Bild']:=s;
+                end;
+              finally
+                L.Free;
+              end;
+            end;
           end;
+        end;
+      end;
+    end;
   end;
-
 end;
 
 procedure TdmMain.DataModuleCreate(Sender: TObject);
