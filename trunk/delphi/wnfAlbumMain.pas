@@ -32,7 +32,7 @@ implementation
 
 {$R *.dfm}
 
-uses dsp_ini, wnfAlbumSetup, dsp_tools;
+uses dsp_ini, wnfAlbumSetup, wnfAlbumTools, dsp_tools;
 
 resourcestring
   stError404 = 'Seite nicht gefunden';
@@ -43,7 +43,8 @@ var
   arr: TdspJSONArray;
   pfad: string;
   jahr: string;
-  L: TStringList;
+  monat: string;
+  L: TStrings;
   s: string;
   monate: array[1..12] of boolean;
 begin
@@ -62,10 +63,8 @@ begin
       if url = 'jahre' then begin
         arr := json.asArray['Jahre'];
         pfad := FAlben[StrToIntDef(params.Values['Album'], 0)].Pfad;
-        L := TStringList.Create;
+        L := getAllDir(pfad, '????');
         try
-          L.Sorted := true;
-          FindDirectorys(L, pfad);
           for S in L do
             if StrToIntDef(s, 0) > 0 then
               arr.AddObject.asString['Jahr'] := s;
@@ -79,15 +78,13 @@ begin
           pfad := FAlben[StrToIntDef(params.Values['Album'], 0)].Pfad;
           jahr := params.Values['Jahr'];
           FillChar(Monate, SizeOf(Monate), 0);
-          L := TStringList.Create;
+          L := getAllDir(pfad + '\' + jahr, jahr + '*');
           try
-            L.Sorted := true;
-            FindDirectorys(L, pfad + '\' + jahr);
-          for S in L do begin
-            i:=StrToIntDef(Copy(s,5,2),0);
-            if i in [1..12] then
-              monate[i]:=true;
-          end;
+            for S in L do begin
+              i := StrToIntDef(Copy(s, 5, 2), 0);
+              if i in [1..12] then
+                monate[i] := true;
+            end;
           finally
             L.Free;
           end;
@@ -97,7 +94,23 @@ begin
                 asInteger['Monat'] := i;
                 asString['Name'] := LongMonthNames[i];
               end;
-        end;
+        end
+        else
+          if url = 'tage' then begin
+            arr := json.asArray['Monate'];
+            pfad := FAlben[StrToIntDef(params.Values['Album'], 0)].Pfad;
+            jahr := params.Values['Jahr'];
+            monat := params.Values['Monat'];
+            while length(monat) < 2 do monat := '0' + monat;
+            L := getAllDir(pfad + '\' + jahr, jahr + monat + '*');
+            try
+          for S in L do
+              arr.AddObject.asString['Verzeichnis'] := s;
+
+            finally
+              L.Free;
+            end;
+          end;
   end;
 
 end;
@@ -162,7 +175,7 @@ var
   l: integer;
 begin
   http.Active := false;
-  http.Bindings[0].Port := IniDatei.ReadInteger('Einstellungen', 'Port', 80);
+  http.DefaultPort := IniDatei.ReadInteger('Einstellungen', 'Port', 80);
   http.Active := true;
   l := IniDatei.ReadInteger('Alben', 'Anzahl', 0);
   SetLength(FAlben, l);

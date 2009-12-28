@@ -5,11 +5,7 @@ object dmMain: TdmMain
   Height = 171
   Width = 287
   object http: TIdHTTPServer
-    Bindings = <
-      item
-        IP = '127.0.0.1'
-        Port = 80
-      end>
+    Bindings = <>
     AutoStartSession = True
     ServerSoftware = 'wnfAlbum'
     OnCommandGet = httpCommandGet

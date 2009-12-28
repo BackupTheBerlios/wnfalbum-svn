@@ -4,5 +4,10 @@ root {
 
 .auswahlbox{
     width: 8em;
+    text-align: center;
+}
+
+#dir{
+    min-width: 20em;
 }
 

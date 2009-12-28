@@ -1,6 +1,7 @@
 var aktuAlbum='';
 var aktuJahr='';
 var aktuMonat='';
+var aktuTag='';
 
 $("Dokument").ready(function(){
     $.getJSON('q/album', '', function(antwort){
@@ -18,7 +19,9 @@ function getJahre(){
     var s=$('#album').val();
     if (s!=aktuAlbum) {
         aktuAlbum=s;
-        $.getJSON('q/jahre', {Album: aktuAlbum}, function(antwort){
+        $.getJSON('q/jahre', {
+            Album: aktuAlbum
+        }, function(antwort){
             var s='';
             var max=antwort.Jahre.length -1;
             for (var i in antwort.Jahre)
@@ -39,8 +42,37 @@ function getMonat(){
     var s=$('#jahr').val();
     if (s!=aktuJahr) {
         aktuJahr=s;
-        $.getJSON('q/monat', {Album: aktuAlbum,Jahr: aktuJahr}, function(antwort){
+        $.getJSON('q/monat', {
+            Album: aktuAlbum,
+            Jahr: aktuJahr
+        }, function(antwort){
+            var s='';
+            var max=antwort.Monate.length -1;
+            for (var i in antwort.Monate)
+                if (i==max)
+                    s+='<option selected value="'+antwort.Monate[i].Monat+'">'+antwort.Monate[i].Name+'</option>';
+                else
+                    s+='<option value="'+antwort.Monate[i].Monat+'">'+antwort.Monate[i].Name+'</option>';
+            $('#monat').html(s).click(function(){
+                getTage();
+            })
+            aktuMonat='';
+            getTage();
+        })
+    }
+}
+
+function getTage(){
+    var s=$('#monat').val();
+    if (s!=aktuMonat) {
+        aktuMonat=s;
+        $.getJSON('q/tage', {
+            Album: aktuAlbum,
+            Jahr: aktuJahr,
+            Monat: aktuMonat
+        }, function(antwort){
 
             })
-    }
+        }
+
 }

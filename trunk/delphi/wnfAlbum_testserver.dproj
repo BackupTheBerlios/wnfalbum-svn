@@ -51,6 +51,7 @@
 			<DCCReference Include="wnfAlbumSetup.pas">
 				<Form>fmSetup</Form>
 			</DCCReference>
+			<DCCReference Include="wnfAlbumTools.pas"/>
 			<BuildConfiguration Include="Basis">
 				<Key>Base</Key>
 			</BuildConfiguration>
