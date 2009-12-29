@@ -17,6 +17,7 @@ class TwnfAlbum:
         self.grundpfad = aGrundpfad
         print 'wnfAlbum 0.1'
         print 'Grundpfad: %s' % (self.grundpfad)
+        #Jahre als Liste ablegen
         self.jahre=[]
         self.tage=[]
         y = os.listdir(self.grundpfad)
@@ -66,7 +67,27 @@ class TwnfAlbum:
                         self.bilder.append(filepath)
         self.bilder.sort()
 
+    def json_alben(self):
+        """ liefert alle Alben als json_object
+        {"URL":"album","Params":null,"Alben":[{"Album":0,"Name":"mein"}]}
+        """
+        z = '{"URL":"album","Params":null,"Alben":['
+        z = '%s{"Album":0,"Name":"%s"}' % (z,'Olympus')
+        z = '%s]}' % (z)
+        return z
+
     def json_jahre(self):
+        """liefert alle Jahre als json_object"""
+        z='{"URL":"jahre","Params":"Album=0","Jahre":['
+        for i in range(len(self.jahre)):
+            z = '%s{"Jahr":"%s"}' % (z,self.jahre[i])
+            #einzelne Elemente durch Komma trennen
+            if i<len(self.jahre)-1:
+                z = '%s,' % (z)
+        z = '%s]}' % (z)
+        return z
+
+    def json_jahre_x(self):
         """liefert die Jahre des Albums als json_objekt"""
         j=json.loads('["Album", {"Jahr":["baz", null, 1.0, 2]}]')
         return j
@@ -101,4 +122,7 @@ class TwnfAlbum:
 if __name__ == "__main__":
     dn = '/wnfdaten/Olympus/'
     a = TwnfAlbum(dn)
+    print a.json_alben()
+    #print '{"URL":"album","Params":null,"Alben":[{"Album":0,"Name":"mein"}]}'
     print a.json_jahre()
+#    print a.html_jahre()
