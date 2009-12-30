@@ -12,12 +12,11 @@ Requirements
 Literatur:
 http://archiv.tu-chemnitz.de/pub/2007/0048/data/Studienarbeit_Ajax_AndreLanger.pdf
 http://www.fh-wedel.de/~si/seminare/ws06/Ausarbeitung/09.Python/python3.htm
+http://www.cherrypy.org/wiki/CherryPyFaq
 """
 
 import os
-import sys
 import cherrypy
-import time
 from Cheetah.Template import Template
 
 
@@ -37,32 +36,24 @@ class Root(object):
         return unicode(template)
     index.exposed = True
 
-    def q(self,*args):
-        print(args)
-        if args[0]=='album':
-            z = self.album()
-        elif args[0]=='jahre':
-            z = self.jahre()
+    def q(self, id, *args, **kwargs):
+        print id,args,kwargs
+        if id=='album':
+            z = self.album(*args)
+        elif id=='jahre':
+            z = self.jahre(*args)
+        elif id=='monat':
+            z = self.monat(*args)
+        elif id=='tage':
+            z = self.tage(*args)
+        elif id=='bilder':
+            z = self.bilder(*args)
         else:
-            z = ''
+            z = "Unbekannter Ausdruck: %s" % (id)
         return z
     q.exposed = True
 
-    def album (self):
-        z = '{"URL":"album","Params":null,"Alben":['
-        z = '%s{"Album":0,"Name":"%s"}' % (z,'Olympus')
-        z = '%s]}' % (z)
-        return z
-    album.exposed = True
-
-    def jahre (self):
-        z = '{"URL":"album","Params":null,"Alben":['
-        z = '%s{"Album":0,"Name":"%s"}' % (z,'Olympus')
-        z = '%s]}' % (z)
-        return z
-    jahre.exposed = True
-    
-    def default(self,*args):
+    def default(self,*args, **kwargs):
         e = """
             Hierher gelangen Sie, wenn Sie sich vertippt haben
             Methode default() der Klasse Start.
@@ -70,26 +61,61 @@ class Root(object):
         return e
     default.exposed = True
 
-class q(object):
-    def album (self):
+    def album (self, *args):
         z = '{"URL":"album","Params":null,"Alben":['
-        z = '%s{"Album":0,"Name":"%s"}' % (z,'Olympus')
+        z = '%s{"Album":0,"Name":"%s"},' % (z,'Olympus')
+        z = '%s{"Album":0,"Name":"%s"}' % (z,'Ixus')
         z = '%s]}' % (z)
         return z
     album.exposed = True
 
+    def jahre (self,*args):
+        z='{"URL":"jahre","Params":"Album=0","Jahre":['
+        for i in range(10):
+            z = '%s{"Jahr":"%d"}' % (z,i+2000)
+            #einzelne Elemente durch Komma trennen
+            if i<10-1:
+                z = '%s,' % (z)
+        z = '%s]}' % (z)
+        return z
+    jahre.exposed = True
 
-def main_alt():
-    app = cherrypy.tree.mount(Root(), config = INI_FILENAME)
-    cherrypy.config.update({"tools.staticdir.root": APPDIR})
-    cherrypy.quickstart(app)
+    def monat (self,*args):
+        z="""{"URL":"monat","Params":"Album=0,Jahr=2009","Monate":[
+          {"Monat":1,"Name":"Januar"},
+          {"Monat":2,"Name":"Februar"},
+          {"Monat":3,"Name":"März"},
+          {"Monat":4,"Name":"April"},
+          {"Monat":5,"Name":"Mai"},
+          {"Monat":6,"Name":"Juni"},
+          {"Monat":7,"Name":"Juli"},
+          {"Monat":8,"Name":"August"},
+          {"Monat":9,"Name":"September"},
+          {"Monat":10,"Name":"Oktober"},
+          {"Monat":11,"Name":"November"},
+          {"Monat":12,"Name":"Dezember"}]}
+          """
+        return z
+
+    def tage (self,*args):
+        z="""{"URL":"tage","Params":"Album=0,Jahr=2009,Monat=10","Tage":[
+          {"Name":"01 - 1. Monats","Verzeichnis":"2009-12-01"},
+          {"Name":"02 - 2. des Monats","Verzeichnis":"2009-12-02"}
+        ]}"""
+        return z
+
+    def bilder (self,*args):
+        z="""{"URL":"bilder","Params":"Album=0,Jahr=2009,Monat=10","Tage":[
+          {"Name":"01 - 1. Monats","Verzeichnis":"2009-12-01"},
+          {"Name":"02 - 2. des Monats","Verzeichnis":"2009-12-02"}
+        ]}"""
+        return z
 
 def main():
     app = cherrypy.tree.mount(Root(), config = INI_FILENAME)
     cherrypy.config.update({"tools.staticdir.root": APPDIR})
     #Aufbauen der Anwendung
     cherrypy.root = Root()
-    cherrypy.root.q = q()
     #Starten des Servers
     cherrypy.quickstart(app)
 
