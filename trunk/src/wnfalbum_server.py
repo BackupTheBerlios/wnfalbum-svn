@@ -98,16 +98,20 @@ class Root(object):
         return z
 
     def tage (self,*args):
-        z="""{"URL":"tage","Params":"Album=0,Jahr=2009,Monat=10","Tage":[
-          {"Name":"01 - 1. Monats","Verzeichnis":"2009-12-01"},
-          {"Name":"02 - 2. des Monats","Verzeichnis":"2009-12-02"}
+        z="""{"URL":"tage","Params":"Album=0,Jahr=2009,Monat=12","Tage":[
+        {"Name":"07 - ","Verzeichnis":"20091207"},
+        {"Name":"09 - ","Verzeichnis":"20091209"},
+        {"Name":"24 - Weihnachten","Verzeichnis":"20091224"},
+        {"Name":"24 - Ralf",
+        "Verzeichnis":"20091224 Ralf"}
         ]}"""
         return z
 
     def bilder (self,*args):
-        z="""{"URL":"bilder","Params":"Album=0,Jahr=2009,Monat=10","Tage":[
-          {"Name":"01 - 1. Monats","Verzeichnis":"2009-12-01"},
-          {"Name":"02 - 2. des Monats","Verzeichnis":"2009-12-02"}
+        z="""{"URL":"bilder","Params":"Album=0,Jahr=2009,Monat=12,Tag=20091207",
+        "Bilder":[
+        {"Bild":"Hund Ralf.JPG"},
+        {"Bild":"uwe.jpg"}
         ]}"""
         return z
 
