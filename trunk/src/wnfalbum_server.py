@@ -38,17 +38,29 @@ class Root(object):
     index.exposed = True
 
     def q(self, id, *args, **kwargs):
-        print id,args,kwargs
+        print kwargs
+        for key in kwargs:
+            print "another keyword arg: %s: %s" % (key, kwargs[key])
         if id=='album':
-            z = self.album(*args)
+            z = self.album()
         elif id=='jahre':
-            z = self.jahre(*args)
+            albumnummer = int(kwargs['Album'])
+            z = self.jahre(albumnummer)
         elif id=='monat':
-            z = self.monat(*args)
+            albumnummer = int(kwargs['Album'])
+            jahr = int(kwargs['Jahr'])
+            z = self.monat(albumnummer,jahr)
         elif id=='tage':
-            z = self.tage(*args)
+            albumnummer = int(kwargs['Album'])
+            jahr = int(kwargs['Jahr'])
+            monat = int(kwargs['Monat'])
+            z = self.tage(albumnummer,jahr,monat)
         elif id=='bilder':
-            z = self.bilder(*args)
+            albumnummer = int(kwargs['Album'])
+            jahr = int(kwargs['Jahr'])
+            monat = int(kwargs['Monat'])
+            verzeichnis = kwargs['Tag']
+            z = self.bilder(albumnummer,jahr,monat,verzeichnis)
         else:
             z = "Unbekannter Ausdruck: %s" % (id)
         return z
@@ -62,28 +74,22 @@ class Root(object):
         return e
     default.exposed = True
 
-    def album (self, *args):
-        a = wnfalbum.wnfalbum_alben()
-        z = '{"URL":"album","Params":null,"Alben":['
-        for n,p in a:
-            z = '%s{"Album":0,"Name":"%s"},' % (z,n)
-        z = '%s]}' % (z)
+    def album (self):
+        a = wnfalbum.TwnfAlben()
+        z = a.json_alben()
         return z
-    album.exposed = True
 
-    def jahre (self,*args):
-        z='{"URL":"jahre","Params":"Album=0","Jahre":['
-        for i in range(10):
-            z = '%s{"Jahr":"%d"}' % (z,i+2000)
-            #einzelne Elemente durch Komma trennen
-            if i<10-1:
-                z = '%s,' % (z)
-        z = '%s]}' % (z)
+    def jahre (self,albumnummer):
+        """
+        {"URL":"jahre","Params":"Album=0","Jahre":['
+        """
+        a = wnfalbum.TwnfAlben()
+        z = a.json_jahre(albumnummer)
         return z
-    jahre.exposed = True
 
-    def monat (self,*args):
-        z="""{"URL":"monat","Params":"Album=0,Jahr=2009","Monate":[
+    def monat (self,albumnummer,jahr):
+        """
+          {"URL":"monat","Params":"Album=0,Jahr=2009","Monate":[
           {"Monat":1,"Name":"Januar"},
           {"Monat":2,"Name":"Februar"},
           {"Monat":3,"Name":"März"},
@@ -97,24 +103,32 @@ class Root(object):
           {"Monat":11,"Name":"November"},
           {"Monat":12,"Name":"Dezember"}]}
           """
+        a = wnfalbum.TwnfAlben()
+        z = a.json_monate(albumnummer, jahr)
         return z
 
-    def tage (self,*args):
-        z="""{"URL":"tage","Params":"Album=0,Jahr=2009,Monat=12","Tage":[
+    def tage (self,albumnummer,jahr,monat):
+        """{"URL":"tage","Params":"Album=0,Jahr=2009,Monat=12","Tage":[
         {"Name":"07 - ","Verzeichnis":"20091207"},
         {"Name":"09 - ","Verzeichnis":"20091209"},
         {"Name":"24 - Weihnachten","Verzeichnis":"20091224"},
-        {"Name":"24 - Ralf",
-        "Verzeichnis":"20091224 Ralf"}
-        ]}"""
+        {"Name":"24 - Ralf","Verzeichnis":"20091224 Ralf"}
+        ]}
+        """
+        a = wnfalbum.TwnfAlben()
+        z = a.json_tage(albumnummer, jahr, monat)
         return z
 
-    def bilder (self,*args):
-        z="""{"URL":"bilder","Params":"Album=0,Jahr=2009,Monat=12,Tag=20091207",
+    def bilder (self,albumnummer,jahr,monat,verzeichnis):
+        """
+        {"URL":"bilder","Params":"Album=0,Jahr=2009,Monat=12,Tag=20091207",
         "Bilder":[
         {"Bild":"Hund Ralf.JPG"},
         {"Bild":"uwe.jpg"}
-        ]}"""
+        ]}
+        """
+        a = wnfalbum.TwnfAlben()
+        z = a.json_bilder(albumnummer, jahr, monat, verzeichnis)
         return z
 
 def main():
