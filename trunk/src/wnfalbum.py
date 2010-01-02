@@ -13,7 +13,9 @@ __date__ ="$22.11.2009 09:12:33$"
 # Must be lower case!
 EXT_WHITELIST = (".jpeg", ".png", ".jpg")
 SECTION_ALBEN = "Alben"
-
+cMonateL =("Januar","Februar","März","April","Mai","Juni","Juli",
+           "August","September","Oktober","November","Dezember")
+           
 class TwnfAlbum:
 
     def __init__(self,aGrundpfad):
@@ -155,6 +157,24 @@ class TwnfAlben:
             d = 0
         return d
 
+    def get_albumdat_titel(self,v):
+        """
+        sucht im Verzeichnis nach einer Album.dat Datei und liefert den Titel des Tages
+        """
+        n=''
+        dn='%s/ALBUM.DAT' % (v)
+        if os.path.exists(dn):
+            ini = ConfigParser.ConfigParser()
+            ini.read(dn)
+            n=ini.get('TITEL','TITELNAME')
+        else:
+            dn='%s/Album.dat' % (v)
+            if os.path.exists(dn):
+                ini = ConfigParser.ConfigParser()
+                ini.read(dn)
+                n=ini.get('TITEL','TITELNAME')
+        return n
+
     def isfotoverzeichnis(self,v,aJahr):
         if not os.path.isdir(v):
             return False
@@ -225,12 +245,40 @@ class TwnfAlben:
                         break
                     else:
                         i=0
-                print i,d.month
                 if i==0:
                     i=d.month
-                    print i,v,d
                     monate.append(i)
         return monate
+
+    def album_tage(self,albumnummer,jahr,monat):
+        grundpfad=self.album_pfad(albumnummer)
+        grundpfad='%s/%d/' % (grundpfad,jahr)
+        y = os.listdir(grundpfad)
+        y.sort()
+        tage = []
+        for v in y:
+            d = self.verzeichnis_to_date(v)
+            if d<>0:
+                if monat==d.month:
+                    n=self.get_albumdat_titel('%s%s' % (grundpfad,v))
+                    tage.append([n,v])
+        return tage
+
+    def album_bilder(self,albumnummer,jahr,v):
+        grundpfad=self.album_pfad(albumnummer)
+        grundpfad='%s/%d/' % (grundpfad,jahr)
+        grundpfad='%s/%s/' % (grundpfad,v)
+        bilder=[]
+        for dirpath, dirnames, filenames in os.walk(grundpfad):
+            for filename in filenames:
+                filepath = os.path.join(dirpath, filename)
+                if not os.path.isfile(filepath):
+                    continue
+                for ext in EXT_WHITELIST:
+                    if filename.lower().endswith(ext):
+                        bilder.append(filepath)
+        bilder.sort()
+        return bilder
 
     def json_alben(self):
         z = ''
@@ -256,7 +304,39 @@ class TwnfAlben:
         return z
 
     def json_monate(self,albumnummer,jahr):
-        z = self.album_monate(albumnummer, jahr)
+        m=self.album_monate(albumnummer, jahr)
+        z = ''
+        i = 0
+        for s in m:
+            if z<>'':
+                z = '%s,' % (z)
+            z = '%s{"Monat":"%d","Name":"%s"}' % (z,int(s),cMonateL[int(s-1)])
+            i=i+1
+        z='{"URL":"monat","Params":"Album=%d,Jahr=%d","Monate":[%s]}' % (albumnummer,int(jahr),z)
+        return z
+
+    def json_tage(self,albumnummer,jahr,monat):
+        m=self.album_tage(albumnummer, jahr,monat)
+        z = ''
+        i = 0
+        for n,v in m:
+            if z<>'':
+                z = '%s,' % (z)
+            z = '%s{"Name":"%s","Verzeichnis":"%s"}' % (z,n,v)
+            i=i+1
+        z='{"URL":"tage","Params":"Album=%d,Jahr=%d,Monat=%d","Tage":[%s]}' % (albumnummer,int(jahr),int(monat),z)
+        return z
+
+    def json_bilder(self,albumnummer,jahr,monat,verzeichnis):
+        m=self.album_bilder(albumnummer, jahr,verzeichnis)
+        z = ''
+        i = 0
+        for s in m:
+            if z<>'':
+                z = '%s,' % (z)
+            z = '%s{"Bild":"%s"}' % (z,s)
+            i=i+1
+        z='{"URL":"bilder","Params":"Album=%d,Jahr=%d,Monat=%d,Tag=%s","Bilder":[%s]}' % (albumnummer,int(jahr),int(monat),verzeichnis,z)
         return z
 
 if __name__ == "__main__":
@@ -264,7 +344,10 @@ if __name__ == "__main__":
     a = TwnfAlben()
     print a.json_alben()
     print a.json_jahre(1)
-    print a.json_monate(1, 2000)
+    print a.json_monate(1, 1998)
+    print a.json_tage(1, 1998,04)
+    print a.json_tage(1, 2009,04)
+    print a.json_bilder(1, 2009,04,'2009-04-02')
 #   print '{"URL":"album","Params":null,"Alben":[{"Album":0,"Name":"mein"}]}'
 #   print a.json_jahre()
 #   print a.html_jahre()
