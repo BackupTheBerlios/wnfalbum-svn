@@ -18,6 +18,7 @@ http://www.cherrypy.org/wiki/CherryPyFaq
 import os
 import cherrypy
 from Cheetah.Template import Template
+import wnfalbum
 
 
 THISDIR = APPDIR = os.path.dirname(os.path.abspath(__file__))
@@ -62,9 +63,10 @@ class Root(object):
     default.exposed = True
 
     def album (self, *args):
+        a = wnfalbum.wnfalbum_alben()
         z = '{"URL":"album","Params":null,"Alben":['
-        z = '%s{"Album":0,"Name":"%s"},' % (z,'Olympus')
-        z = '%s{"Album":0,"Name":"%s"}' % (z,'Ixus')
+        for n,p in a:
+            z = '%s{"Album":0,"Name":"%s"},' % (z,n)
         z = '%s]}' % (z)
         return z
     album.exposed = True
