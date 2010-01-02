@@ -38,9 +38,7 @@ class Root(object):
     index.exposed = True
 
     def q(self, id, *args, **kwargs):
-        print kwargs
-        for key in kwargs:
-            print "another keyword arg: %s: %s" % (key, kwargs[key])
+        #print kwargs
         if id=='album':
             z = self.album()
         elif id=='jahre':
@@ -62,7 +60,9 @@ class Root(object):
             verzeichnis = kwargs['Tag']
             z = self.bilder(albumnummer,jahr,monat,verzeichnis)
         else:
-            z = "Unbekannter Ausdruck: %s" % (id)
+            print id,kwargs
+            print "Unbekannter Ausdruck: %s " % (id)
+            z = ""
         return z
     q.exposed = True
 
