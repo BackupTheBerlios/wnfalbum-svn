@@ -159,7 +159,7 @@ class TwnfAlben:
     def album_bilder(self,albumnummer,jahr,v):
         grundpfad=self.album_pfad(albumnummer)
         grundpfad='%s/%d/' % (grundpfad,jahr)
-        grundpfad='%s/%s/' % (grundpfad,v)
+        grundpfad='%s%s/' % (grundpfad,v)
         bilder=[]
         for dirpath, dirnames, filenames in os.walk(grundpfad):
             for filename in filenames:
