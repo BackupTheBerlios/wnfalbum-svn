@@ -3,7 +3,13 @@ var aktuJahr='';
 var aktuMonat='';
 var aktuTag='';
 
+function setHoehe(){
+    $('.leinwand').height($(window).height()-$('.kopf').outerHeight(true)-25);
+}
+
 $("Dokument").ready(function(){
+    setHoehe();
+    $(window).resize(setHoehe);
     $.getJSON('q/album', '', function(antwort){
         var s='';
         for (var i in antwort.Alben)

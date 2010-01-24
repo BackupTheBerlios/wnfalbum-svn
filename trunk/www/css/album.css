@@ -7,6 +7,12 @@ root {
     text-align: center;
 }
 
+.leinwand{
+   width: 100%;
+   background-color: orange;
+   margin: 5px;
+}
+
 #tage{
     min-width: 20em;
 }
