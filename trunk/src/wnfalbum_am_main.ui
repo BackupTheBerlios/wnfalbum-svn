@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="KComboBox" name="cb_jahre">
+        <property name="minimumSize">
+         <size>
+          <width>120</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>120</width>
+          <height>16777215</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="KComboBox" name="cb_tage"/>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <widget class="QGraphicsView" name="gv"/>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuBild">
+    <property name="title">
+     <string>Bild</string>
+    </property>
+    <addaction name="actionNextBild"/>
+    <addaction name="actionPrevBild"/>
+   </widget>
+   <addaction name="menuBild"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionNextBild">
+   <property name="text">
+    <string>ein Bild vor</string>
+   </property>
+   <property name="shortcut">
+    <string>Space</string>
+   </property>
+  </action>
+  <action name="actionPrevBild">
+   <property name="text">
+    <string>ein Bild zurück</string>
+   </property>
+   <property name="shortcut">
+    <string>Backspace</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
