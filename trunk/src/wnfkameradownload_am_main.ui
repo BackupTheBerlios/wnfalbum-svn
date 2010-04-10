@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>514</width>
+    <height>354</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Kamera Download</string>
+  </property>
+  <property name="sizeGripEnabled">
+   <bool>true</bool>
+  </property>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>6</x>
+     <y>17</y>
+     <width>501</width>
+     <height>151</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout">
+    <item row="0" column="0">
+     <widget class="QLineEdit" name="ed_Quelle">
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QPushButton" name="bb_Quelle">
+      <property name="text">
+       <string>Kamera wählen</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLineEdit" name="ed_Ziel"/>
+    </item>
+    <item row="1" column="1">
+     <widget class="QPushButton" name="bb_Ziel">
+      <property name="text">
+       <string>Bilderverzeichnis</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QPushButton" name="bb_Laden">
+      <property name="text">
+       <string>Herunterladen</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QCheckBox" name="cx_Rename">
+      <property name="toolTip">
+       <string>Falls im Urlaub mit mehreren Kameras fotografiert wurde, kann man durch das Umbenennen erreichen, dass die Bilder in der richtigen zeitlichen Reihenfolge angezeigt werden. Umbenannt wird nach
+Vorsilbe_JJJJ_MM_TT_HH_MM_SS.jpg</string>
+      </property>
+      <property name="text">
+       <string>Die Bilder beim herunterladen umbenennen</string>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QLineEdit" name="ed_Vorsilbe">
+      <property name="toolTip">
+       <string>Entweder eine Vorsilbe für das Umbenennen eingeben (oder leer lassen, wenn nicht umbenannt werden soll)</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1">
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>Vorsilbe eintragen</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QTextEdit" name="me_Status">
+   <property name="geometry">
+    <rect>
+     <x>8</x>
+     <y>180</y>
+     <width>501</width>
+     <height>151</height>
+    </rect>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
