@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'wnfkameradownload_am_main.ui'
 #
-# Created: Sat Apr 10 17:22:30 2010
+# Created: Sun Apr 11 11:55:57 2010
 #      by: PyQt4 UI code generator 4.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -15,7 +15,7 @@ class Ui_Dialog(object):
         Dialog.resize(514, 354)
         Dialog.setSizeGripEnabled(True)
         self.layoutWidget = QtGui.QWidget(Dialog)
-        self.layoutWidget.setGeometry(QtCore.QRect(6, 17, 501, 151))
+        self.layoutWidget.setGeometry(QtCore.QRect(6, 17, 501, 152))
         self.layoutWidget.setObjectName("layoutWidget")
         self.gridlayout = QtGui.QGridLayout(self.layoutWidget)
         self.gridlayout.setObjectName("gridlayout")
@@ -44,6 +44,9 @@ class Ui_Dialog(object):
         self.label = QtGui.QLabel(self.layoutWidget)
         self.label.setObjectName("label")
         self.gridlayout.addWidget(self.label, 3, 1, 1, 1)
+        self.cx_Silvestermodus = QtGui.QCheckBox(self.layoutWidget)
+        self.cx_Silvestermodus.setObjectName("cx_Silvestermodus")
+        self.gridlayout.addWidget(self.cx_Silvestermodus, 4, 0, 1, 1)
         self.me_Status = QtGui.QTextEdit(Dialog)
         self.me_Status.setGeometry(QtCore.QRect(8, 180, 501, 151))
         self.me_Status.setObjectName("me_Status")
@@ -61,4 +64,5 @@ class Ui_Dialog(object):
         self.cx_Rename.setText(QtGui.QApplication.translate("Dialog", "Die Bilder beim herunterladen umbenennen", None, QtGui.QApplication.UnicodeUTF8))
         self.ed_Vorsilbe.setToolTip(QtGui.QApplication.translate("Dialog", "Entweder eine Vorsilbe für das Umbenennen eingeben (oder leer lassen, wenn nicht umbenannt werden soll)", None, QtGui.QApplication.UnicodeUTF8))
         self.label.setText(QtGui.QApplication.translate("Dialog", "Vorsilbe eintragen", None, QtGui.QApplication.UnicodeUTF8))
+        self.cx_Silvestermodus.setText(QtGui.QApplication.translate("Dialog", "Silverstermodus (Der Tag endet erst um 03:00 Uhr)", None, QtGui.QApplication.UnicodeUTF8))
 

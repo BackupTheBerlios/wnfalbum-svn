@@ -22,7 +22,7 @@
      <x>6</x>
      <y>17</y>
      <width>501</width>
-     <height>151</height>
+     <height>152</height>
     </rect>
    </property>
    <layout class="QGridLayout">
@@ -82,6 +82,13 @@ Vorsilbe_JJJJ_MM_TT_HH_MM_SS.jpg</string>
      <widget class="QLabel" name="label">
       <property name="text">
        <string>Vorsilbe eintragen</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0">
+     <widget class="QCheckBox" name="cx_Silvestermodus">
+      <property name="text">
+       <string>Silverstermodus (Der Tag endet erst um 03:00 Uhr)</string>
       </property>
      </widget>
     </item>

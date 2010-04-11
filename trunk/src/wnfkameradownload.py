@@ -6,6 +6,7 @@ import os.path
 import ConfigParser
 from stat import *
 import datetime
+from datetime import timedelta
 import time
 import shutil
 from PyQt4 import QtGui,QtCore
@@ -15,6 +16,7 @@ class Download_Dlg(QtGui.QDialog, Dlg):
     def __init__(self):
         QtGui.QDialog.__init__(self)
         self.setupUi(self)
+        self.setWindowTitle('wnfKameraDownload 1.02')
         dn = os.environ["HOME"]
         dn = "%s/.wnfkameradownload" % (dn)
         self.IniPfadname = dn
@@ -24,6 +26,7 @@ class Download_Dlg(QtGui.QDialog, Dlg):
         self.IniDateiname = dn
         self.qpfad=''
         self.zpfad=''
+        self.vorsilbe=''
         self.Anzahl=0
         if os.path.exists(dn):
             s = self.lese_str(self.ini,"Standard","Kamera")
@@ -37,6 +40,8 @@ class Download_Dlg(QtGui.QDialog, Dlg):
                 self.ed_Vorsilbe.setText(s)
             b = self.lese_bool(self.ini,"Standard","Rename")
             self.cx_Rename.setChecked(b)
+            b = self.lese_bool(self.ini,"Standard","Silvestermodus")
+            self.cx_Silvestermodus.setChecked(b)
 
     #http://docs.python.org/lib/os-file-dir.html
     def isSchreibrecht(self,aPfad):
@@ -88,6 +93,8 @@ class Download_Dlg(QtGui.QDialog, Dlg):
         self.schreibe_str(self.ini,"Standard","Vorsilbe",s)
         b=self.cx_Rename.isChecked()
         self.schreibe_bool(self.ini,"Standard","Rename",b)
+        b=self.cx_Silvestermodus.isChecked()
+        self.schreibe_bool(self.ini,"Standard","Silvestermodus",b)
         #
         self.ForceDir(self.IniPfadname)
         fd = open(self.IniDateiname, 'w')
@@ -101,17 +108,23 @@ class Download_Dlg(QtGui.QDialog, Dlg):
         app.processEvents()
         print s
 
-
-    def ein_Bild_kopieren(self,dateiname,vorsilbe):
+    def ein_Bild_kopieren(self,dirname,dateiname,vorsilbe):
         """ Ein Bild von der Kamera herunterladen,
             wenn es neuer ist oder noch nicht existiert """
         #qdn='%s%s' % (self.qpfad,dateiname)
-        qdn=os.path.join(self.qpfad, dateiname)
+        qdn=os.path.join(dirname, dateiname)
         if os.path.isfile(qdn):
             ctm = os.stat(qdn)[ST_CTIME]
             gmt = time.gmtime(ctm)
-            #zp='%s%s/%s England' % (self.zpfad,gmt[0],time.strftime('%Y-%m-%d',gmt))
-            zp='%s%s/%s' % (self.zpfad,gmt[0],time.strftime('%Y-%m-%d',gmt))
+            if (self.cx_Silvestermodus.isChecked() and gmt[3]<3):
+                ctm = ctm - (24*60*60)
+                gmt = time.gmtime(ctm)
+                print "Silvester",gmt
+                #s='%s-%s-%s' % (str(gmt[0]).zfill(4),str(gmt[1]-1).zfill(2),str(gmt[2]).zfill(2))
+                #zp='%s%s/%s' % (self.zpfad,gmt[0],s)
+            zp=os.path.join(self.zpfad,str(gmt[0]))
+            zp=os.path.join(zp,time.strftime('%Y-%m-%d',gmt))
+            print zp
             if self.ForceDir(zp):
                 if self.cx_Rename.isChecked():
                     zdn=vorsilbe.lower()
@@ -134,6 +147,12 @@ class Download_Dlg(QtGui.QDialog, Dlg):
                     #self.anzeige('%s -> %s' % (qdn,zdn))
                     self.anzeige('-> %s' % (zdn))
 
+    def download_ein_Verzeichnis(self,data,dirname,filesindir):
+        #print (dirname)
+        for dateiname in filesindir:
+            #print (dateiname)
+            self.ein_Bild_kopieren(dirname,dateiname,self.vorsilbe)
+ 
     def download(self, aQuellpfad, aZielpfad):
         """" Herunterladen der Bilder von der Kamera """
         self.qpfad=aQuellpfad
@@ -142,20 +161,19 @@ class Download_Dlg(QtGui.QDialog, Dlg):
         self.anzeige('Das Kamera-Verzeichnis ist: %s' % (self.qpfad))
         self.anzeige('Das Bilder-Verzeichnis ist: %s' % (self.zpfad))
         self.ok=False
-        vorsilbe=str(self.ed_Vorsilbe.text())
+        self.vorsilbe=str(self.ed_Vorsilbe.text())
         if self.ForceDir(self.zpfad):
             if self.isLeserecht(self.qpfad):
                 self.ok=True
             else:
-                print "Keine Leserechte vom Verzeichnis %s " % (self.qpfad)
+                s="Keine Leserechte vom Verzeichnis %s " % (self.qpfad)
+                print s
+                self.anzeige(s)
         else:
             print "Keine Schreibrechte auf das Verzeichnis %s " % (self.zpfad)
         if self.ok:
             print 'Download beginnt'
-            y = os.listdir(self.qpfad)
-            y.sort()
-            for dateiname in y:
-                self.ein_Bild_kopieren(dateiname,vorsilbe)
+            os.path.walk(self.qpfad,self.download_ein_Verzeichnis,None)
             self.anzeige('%d Dateien kopiert.' % (self.Anzahl))
         else:
             self.anzeige('Der Download konnte nicht gestartet werden.')
