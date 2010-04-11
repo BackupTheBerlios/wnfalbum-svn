@@ -2,6 +2,7 @@
 # -*- coding: UTF-8 -*-
 import sys
 import os
+import os.path
 import ConfigParser
 from stat import *
 import datetime
@@ -34,6 +35,8 @@ class Download_Dlg(QtGui.QDialog, Dlg):
             s = self.lese_str(self.ini,"Standard","Vorsilbe")
             if (s<>''):
                 self.ed_Vorsilbe.setText(s)
+            b = self.lese_bool(self.ini,"Standard","Rename")
+            self.cx_Rename.setChecked(b)
 
     #http://docs.python.org/lib/os-file-dir.html
     def isSchreibrecht(self,aPfad):
@@ -62,6 +65,17 @@ class Download_Dlg(QtGui.QDialog, Dlg):
         ini.set(aSection, aName,aWert)
         print aWert
 
+    def lese_bool(self,ini,aSection,aName):
+        s=self.lese_str(ini, aSection, aName)
+        return s.lower() in ["yes", "true", "t", "ja","j"]
+
+    def schreibe_bool(self,ini,aSection,aName,aWert):
+        if aWert:
+            s='ja'
+        else:
+            s='nein'
+        self.schreibe_str(ini, aSection, aName, s)
+
     def speicher_ini(self):
         """" Schreiben der Variablen in die Ini-Datei """
         s=self.ed_Quelle.text()
@@ -71,8 +85,10 @@ class Download_Dlg(QtGui.QDialog, Dlg):
         if (s<>''):
             self.schreibe_str(self.ini,"Standard","Zielverzeichnis",s)
         s=self.ed_Vorsilbe.text()
-        if (s<>''):
-            self.schreibe_str(self.ini,"Standard","Vorsilbe",s)
+        self.schreibe_str(self.ini,"Standard","Vorsilbe",s)
+        b=self.cx_Rename.isChecked()
+        self.schreibe_bool(self.ini,"Standard","Rename",b)
+        #
         self.ForceDir(self.IniPfadname)
         fd = open(self.IniDateiname, 'w')
         self.ini.write(fd)
@@ -89,7 +105,8 @@ class Download_Dlg(QtGui.QDialog, Dlg):
     def ein_Bild_kopieren(self,dateiname,vorsilbe):
         """ Ein Bild von der Kamera herunterladen,
             wenn es neuer ist oder noch nicht existiert """
-        qdn='%s%s' % (self.qpfad,dateiname)
+        #qdn='%s%s' % (self.qpfad,dateiname)
+        qdn=os.path.join(self.qpfad, dateiname)
         if os.path.isfile(qdn):
             ctm = os.stat(qdn)[ST_CTIME]
             gmt = time.gmtime(ctm)
@@ -97,17 +114,18 @@ class Download_Dlg(QtGui.QDialog, Dlg):
             zp='%s%s/%s' % (self.zpfad,gmt[0],time.strftime('%Y-%m-%d',gmt))
             if self.ForceDir(zp):
                 if self.cx_Rename.isChecked():
-                    zdn=vorsilbe #.lower()
+                    zdn=vorsilbe.lower()
                     if zdn<>'':
                         zdn='%s_' % (zdn)
                     zdn='%s%s_' % (zdn,time.strftime('%H_%M_%S',gmt))
-                    zdn='%s/%s%s' % (zp,zdn,dateiname.lower())
+                    zdn='%s%s' % (zdn,dateiname.lower())
+                    zdn=os.path.join(zp, zdn)
                 else:
                     #hier auf jeden Fall lowercase,
                     #weil nicht sicher ist, wie die Dateinamen
                     #geliefert werden
                     zdn=dateiname.lower()
-                    zdn='%s/%s' % (zp,zdn)
+                    zdn=os.path.join(zp, zdn)
                 if not os.path.exists(zdn):
                     shutil.copyfile(qdn,zdn)
                     #die Originalzeit wieder setzen
@@ -124,7 +142,7 @@ class Download_Dlg(QtGui.QDialog, Dlg):
         self.anzeige('Das Kamera-Verzeichnis ist: %s' % (self.qpfad))
         self.anzeige('Das Bilder-Verzeichnis ist: %s' % (self.zpfad))
         self.ok=False
-        vorsilbe=self.ed_Vorsilbe.text()
+        vorsilbe=str(self.ed_Vorsilbe.text())
         if self.ForceDir(self.zpfad):
             if self.isLeserecht(self.qpfad):
                 self.ok=True
@@ -164,7 +182,7 @@ class Download_Dlg(QtGui.QDialog, Dlg):
     def on_bb_Laden_clicked(self):
         print 'Herunterladen der Bilder von der Kamera'
         self.speicher_ini()
-        self.download(self.ed_Quelle.text(), self.ed_Ziel.text())
+        self.download(str(self.ed_Quelle.text()), str(self.ed_Ziel.text()))
 
 if __name__ == '__main__':
   app = QtGui.QApplication(sys.argv)
