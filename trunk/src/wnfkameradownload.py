@@ -116,6 +116,7 @@ class Download_Dlg(QtGui.QDialog, Dlg):
         if os.path.isfile(qdn):
             ctm = os.stat(qdn)[ST_CTIME]
             gmt = time.gmtime(ctm)
+            gmt = time.localtime(ctm)
             if (self.cx_Silvestermodus.isChecked() and gmt[3]<3):
                 ctm = ctm - (24*60*60)
                 gmt = time.gmtime(ctm)
