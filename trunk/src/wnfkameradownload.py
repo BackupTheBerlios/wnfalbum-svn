@@ -16,7 +16,7 @@ class Download_Dlg(QtGui.QDialog, Dlg):
     def __init__(self):
         QtGui.QDialog.__init__(self)
         self.setupUi(self)
-        self.setWindowTitle('wnfKameraDownload 1.02')
+        self.setWindowTitle('wnfKameraDownload 1.03')
         dn = os.environ["HOME"]
         dn = "%s/.wnfkameradownload" % (dn)
         self.IniPfadname = dn
@@ -40,6 +40,8 @@ class Download_Dlg(QtGui.QDialog, Dlg):
                 self.ed_Vorsilbe.setText(s)
             b = self.lese_bool(self.ini,"Standard","Rename")
             self.cx_Rename.setChecked(b)
+            b = self.lese_bool(self.ini,"Standard","Rotate")
+            self.cx_Rotate.setChecked(b)
             b = self.lese_bool(self.ini,"Standard","Silvestermodus")
             self.cx_Silvestermodus.setChecked(b)
 
@@ -93,6 +95,8 @@ class Download_Dlg(QtGui.QDialog, Dlg):
         self.schreibe_str(self.ini,"Standard","Vorsilbe",s)
         b=self.cx_Rename.isChecked()
         self.schreibe_bool(self.ini,"Standard","Rename",b)
+        b=self.cx_Rotate.isChecked()
+        self.schreibe_bool(self.ini,"Standard","Rotate",b)
         b=self.cx_Silvestermodus.isChecked()
         self.schreibe_bool(self.ini,"Standard","Silvestermodus",b)
         #
@@ -131,7 +135,7 @@ class Download_Dlg(QtGui.QDialog, Dlg):
                     zdn=vorsilbe.lower()
                     if zdn<>'':
                         zdn='%s_' % (zdn)
-                    zdn='%s%s_' % (zdn,time.strftime('%H_%M_%S',gmt))
+                    zdn='%s%s_' % (zdn,time.strftime('%Y_%m_%d_%H_%M_%S',gmt))
                     zdn='%s%s' % (zdn,dateiname.lower())
                     zdn=os.path.join(zp, zdn)
                 else:
@@ -145,6 +149,9 @@ class Download_Dlg(QtGui.QDialog, Dlg):
                     #die Originalzeit wieder setzen
                     os.utime(zdn,(ctm,ctm))
                     self.Anzahl=self.Anzahl+1
+                    if self.cx_Rotate.isChecked():
+                        #Jetzt das Bild rotieren, falls möglich und nötig
+                        os.system('exifautotran %s' % (zdn))
                     #self.anzeige('%s -> %s' % (qdn,zdn))
                     self.anzeige('-> %s' % (zdn))
 

@@ -22,7 +22,7 @@
      <x>6</x>
      <y>17</y>
      <width>501</width>
-     <height>152</height>
+     <height>167</height>
     </rect>
    </property>
    <layout class="QGridLayout">
@@ -71,24 +71,37 @@ Vorsilbe_JJJJ_MM_TT_HH_MM_SS.jpg</string>
       </property>
      </widget>
     </item>
-    <item row="3" column="0">
+    <item row="4" column="0">
      <widget class="QLineEdit" name="ed_Vorsilbe">
       <property name="toolTip">
        <string>Entweder eine Vorsilbe für das Umbenennen eingeben (oder leer lassen, wenn nicht umbenannt werden soll)</string>
       </property>
      </widget>
     </item>
-    <item row="3" column="1">
+    <item row="4" column="1">
      <widget class="QLabel" name="label">
       <property name="text">
        <string>Vorsilbe eintragen</string>
       </property>
      </widget>
     </item>
-    <item row="4" column="0">
+    <item row="5" column="0">
      <widget class="QCheckBox" name="cx_Silvestermodus">
       <property name="text">
        <string>Silverstermodus (Der Tag endet erst um 03:00 Uhr)</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QCheckBox" name="cx_Rotate">
+      <property name="toolTip">
+       <string>Falls es die Exif-Daten zulassen wird das Bild mit exifautotran gedreht.</string>
+      </property>
+      <property name="text">
+       <string>Die Bilder wenn möglich und nötig drehen</string>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
       </property>
      </widget>
     </item>

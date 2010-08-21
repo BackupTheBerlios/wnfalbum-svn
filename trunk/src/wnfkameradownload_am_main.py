@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'wnfkameradownload_am_main.ui'
 #
-# Created: Sun Apr 11 11:55:57 2010
-#      by: PyQt4 UI code generator 4.6
+# Created: Sat Aug 21 06:43:23 2010
+#      by: PyQt4 UI code generator 4.7.3
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -15,11 +15,12 @@ class Ui_Dialog(object):
         Dialog.resize(514, 354)
         Dialog.setSizeGripEnabled(True)
         self.layoutWidget = QtGui.QWidget(Dialog)
-        self.layoutWidget.setGeometry(QtCore.QRect(6, 17, 501, 152))
+        self.layoutWidget.setGeometry(QtCore.QRect(6, 17, 501, 167))
         self.layoutWidget.setObjectName("layoutWidget")
         self.gridlayout = QtGui.QGridLayout(self.layoutWidget)
         self.gridlayout.setObjectName("gridlayout")
         self.ed_Quelle = QtGui.QLineEdit(self.layoutWidget)
+        self.ed_Quelle.setText("")
         self.ed_Quelle.setObjectName("ed_Quelle")
         self.gridlayout.addWidget(self.ed_Quelle, 0, 0, 1, 1)
         self.bb_Quelle = QtGui.QPushButton(self.layoutWidget)
@@ -40,13 +41,17 @@ class Ui_Dialog(object):
         self.gridlayout.addWidget(self.cx_Rename, 2, 0, 1, 1)
         self.ed_Vorsilbe = QtGui.QLineEdit(self.layoutWidget)
         self.ed_Vorsilbe.setObjectName("ed_Vorsilbe")
-        self.gridlayout.addWidget(self.ed_Vorsilbe, 3, 0, 1, 1)
+        self.gridlayout.addWidget(self.ed_Vorsilbe, 4, 0, 1, 1)
         self.label = QtGui.QLabel(self.layoutWidget)
         self.label.setObjectName("label")
-        self.gridlayout.addWidget(self.label, 3, 1, 1, 1)
+        self.gridlayout.addWidget(self.label, 4, 1, 1, 1)
         self.cx_Silvestermodus = QtGui.QCheckBox(self.layoutWidget)
         self.cx_Silvestermodus.setObjectName("cx_Silvestermodus")
-        self.gridlayout.addWidget(self.cx_Silvestermodus, 4, 0, 1, 1)
+        self.gridlayout.addWidget(self.cx_Silvestermodus, 5, 0, 1, 1)
+        self.cx_Rotate = QtGui.QCheckBox(self.layoutWidget)
+        self.cx_Rotate.setChecked(True)
+        self.cx_Rotate.setObjectName("cx_Rotate")
+        self.gridlayout.addWidget(self.cx_Rotate, 3, 0, 1, 1)
         self.me_Status = QtGui.QTextEdit(Dialog)
         self.me_Status.setGeometry(QtCore.QRect(8, 180, 501, 151))
         self.me_Status.setObjectName("me_Status")
@@ -65,4 +70,6 @@ class Ui_Dialog(object):
         self.ed_Vorsilbe.setToolTip(QtGui.QApplication.translate("Dialog", "Entweder eine Vorsilbe für das Umbenennen eingeben (oder leer lassen, wenn nicht umbenannt werden soll)", None, QtGui.QApplication.UnicodeUTF8))
         self.label.setText(QtGui.QApplication.translate("Dialog", "Vorsilbe eintragen", None, QtGui.QApplication.UnicodeUTF8))
         self.cx_Silvestermodus.setText(QtGui.QApplication.translate("Dialog", "Silverstermodus (Der Tag endet erst um 03:00 Uhr)", None, QtGui.QApplication.UnicodeUTF8))
+        self.cx_Rotate.setToolTip(QtGui.QApplication.translate("Dialog", "Falls es die Exif-Daten zulassen wird das Bild mit exifautotran gedreht.", None, QtGui.QApplication.UnicodeUTF8))
+        self.cx_Rotate.setText(QtGui.QApplication.translate("Dialog", "Die Bilder wenn möglich und nötig drehen", None, QtGui.QApplication.UnicodeUTF8))
 
