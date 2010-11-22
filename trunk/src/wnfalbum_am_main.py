@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'wnfalbum_am_main.ui'
 #
-# Created: Tue Mar 16 18:18:47 2010
-#      by: PyQt4 UI code generator 4.6
+# Created: Mon Nov 22 17:57:51 2010
+#      by: PyQt4 UI code generator 4.7.3
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -33,7 +33,7 @@ class Ui_MainWindow(object):
         self.verticalLayout.addWidget(self.gv)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 24))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 23))
         self.menubar.setObjectName("menubar")
         self.menuBild = QtGui.QMenu(self.menubar)
         self.menuBild.setObjectName("menuBild")
@@ -45,8 +45,11 @@ class Ui_MainWindow(object):
         self.actionNextBild.setObjectName("actionNextBild")
         self.actionPrevBild = QtGui.QAction(MainWindow)
         self.actionPrevBild.setObjectName("actionPrevBild")
+        self.actionDiashow = QtGui.QAction(MainWindow)
+        self.actionDiashow.setObjectName("actionDiashow")
         self.menuBild.addAction(self.actionNextBild)
         self.menuBild.addAction(self.actionPrevBild)
+        self.menuBild.addAction(self.actionDiashow)
         self.menubar.addAction(self.menuBild.menuAction())
 
         self.retranslateUi(MainWindow)
@@ -59,5 +62,8 @@ class Ui_MainWindow(object):
         self.actionNextBild.setShortcut(QtGui.QApplication.translate("MainWindow", "Space", None, QtGui.QApplication.UnicodeUTF8))
         self.actionPrevBild.setText(QtGui.QApplication.translate("MainWindow", "ein Bild zurück", None, QtGui.QApplication.UnicodeUTF8))
         self.actionPrevBild.setShortcut(QtGui.QApplication.translate("MainWindow", "Backspace", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionDiashow.setText(QtGui.QApplication.translate("MainWindow", "Diashow", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionDiashow.setToolTip(QtGui.QApplication.translate("MainWindow", "Diashow starten", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionDiashow.setShortcut(QtGui.QApplication.translate("MainWindow", "F5", None, QtGui.QApplication.UnicodeUTF8))
 
 from PyKDE4.kdeui import KComboBox

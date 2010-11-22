@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 
 # http://www.rkblog.rk.edu.pl/w/p/qgraphicsview-and-qgraphicsscene/
+# http://www.rkblog.rk.edu.pl/w/p/qtimer-making-timers-pyqt4/
+# http://www.pyside.org/docs/pyside/PySide/QtCore/QTimer.html
 # 
 
 __author__="wnf"
@@ -41,6 +43,10 @@ class Am_Main(QtGui.QMainWindow, Ui_MainWindow):
         self.gv.setScene(self.scene)
         QtCore.QObject.connect(self.actionNextBild, QtCore.SIGNAL("triggered()"), self.nextBildAnzeigen)
         QtCore.QObject.connect(self.actionPrevBild, QtCore.SIGNAL("triggered()"), self.prevBildAnzeigen)
+        QtCore.QObject.connect(self.actionDiashow, QtCore.SIGNAL("triggered()"), self.diaShow)
+        self.ctimer = QtCore.QTimer()
+        # constant timer
+	QtCore.QObject.connect(self.ctimer, QtCore.SIGNAL("timeout()"), self.constantUpdate)
 
     def einVerzeichnis(self,verzeichnis):
         chain = verzeichnis + "/*"
@@ -150,6 +156,22 @@ class Am_Main(QtGui.QMainWindow, Ui_MainWindow):
                                             QtCore.Qt.KeepAspectRatio,
                                             QtCore.Qt.FastTransformation)
         print self.images[p]
+
+    def constantUpdate(self):
+	"""
+	slot for constant timer timeout
+	"""
+        self.nextBildAnzeigen()
+
+
+    def diaShow(self):
+        self.i_pointer = 0
+        if self.ctimer.isActive():
+            self.ctimer.stop()
+            print "Diashow angehalten"
+        else:
+            self.ctimer.start(1000)
+            print "Diashow gestartet"
 
 if __name__ == '__main__':
   app = QtGui.QApplication(sys.argv)

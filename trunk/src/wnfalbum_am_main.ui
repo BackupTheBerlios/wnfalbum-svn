@@ -49,7 +49,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>24</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuBild">
@@ -58,6 +58,7 @@
     </property>
     <addaction name="actionNextBild"/>
     <addaction name="actionPrevBild"/>
+    <addaction name="actionDiashow"/>
    </widget>
    <addaction name="menuBild"/>
   </widget>
@@ -76,6 +77,17 @@
    </property>
    <property name="shortcut">
     <string>Backspace</string>
+   </property>
+  </action>
+  <action name="actionDiashow">
+   <property name="text">
+    <string>Diashow</string>
+   </property>
+   <property name="toolTip">
+    <string>Diashow starten</string>
+   </property>
+   <property name="shortcut">
+    <string>F5</string>
    </property>
   </action>
  </widget>
