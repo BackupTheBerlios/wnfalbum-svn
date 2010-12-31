@@ -13,14 +13,21 @@ from PyQt4 import QtGui,QtCore
 from wnfkameradownload_am_main import Ui_Dialog as Dlg
 
 class Download_Dlg(QtGui.QDialog, Dlg):
-    def __init__(self):
+    def __init__(self,args):
         QtGui.QDialog.__init__(self)
         self.setupUi(self)
-        self.setWindowTitle('wnfKameraDownload 1.03')
-        dn = os.environ["HOME"]
-        dn = "%s/.wnfkameradownload" % (dn)
-        self.IniPfadname = dn
-        dn = "%s/wnfkameradownload.ini" % (dn)
+        self.setWindowTitle('wnfKameraDownload 1.04')
+        dn=self.paramStr(args,1)
+        if dn=="":
+            #oder es wird das Standard Ini-File verwendet
+            dn = os.environ["HOME"]
+            dn = "%s/.wnfkameradownload" % (dn)
+            self.IniPfadname = dn
+            dn = "%s/wnfkameradownload.ini" % (dn)
+        else:
+            self.IniPfadname = os.path.dirname(dn)
+        print "Auswerten von ",dn
+
         self.ini=ConfigParser.ConfigParser()
         self.ini.read(dn)
         self.IniDateiname = dn
@@ -44,6 +51,16 @@ class Download_Dlg(QtGui.QDialog, Dlg):
             self.cx_Rotate.setChecked(b)
             b = self.lese_bool(self.ini,"Standard","Silvestermodus")
             self.cx_Silvestermodus.setChecked(b)
+
+    def paramStr(self,args,ipos):
+        s=""
+        i=0
+        for a in args:
+            if i==ipos:
+                s=a
+                break
+            i=i+1
+        return s
 
     #http://docs.python.org/lib/os-file-dir.html
     def isSchreibrecht(self,aPfad):
@@ -119,17 +136,19 @@ class Download_Dlg(QtGui.QDialog, Dlg):
         qdn=os.path.join(dirname, dateiname)
         if os.path.isfile(qdn):
             ctm = os.stat(qdn)[ST_CTIME]
+            ctm = ctm + 60*60
             gmt = time.gmtime(ctm)
-            gmt = time.localtime(ctm)
+            #gmt = time.localtime(ctm) Das bringt schwierigkeiten wenn bilder vor der Sommerteit aufgenommen und da
             if (self.cx_Silvestermodus.isChecked() and gmt[3]<3):
-                ctm = ctm - (24*60*60)
-                gmt = time.gmtime(ctm)
-                print "Silvester",gmt
-                #s='%s-%s-%s' % (str(gmt[0]).zfill(4),str(gmt[1]-1).zfill(2),str(gmt[2]).zfill(2))
-                #zp='%s%s/%s' % (self.zpfad,gmt[0],s)
-            zp=os.path.join(self.zpfad,str(gmt[0]))
-            zp=os.path.join(zp,time.strftime('%Y-%m-%d',gmt))
-            print zp
+                ctm_vortag = ctm - (24*60*60)
+                gmt_vortag = time.gmtime(ctm_vortag)
+                #print "Silvester",gmt
+                zp=os.path.join(self.zpfad,str(gmt_vortag[0]))
+                zp=os.path.join(zp,time.strftime('%Y-%m-%d',gmt_vortag))
+            else:
+                zp=os.path.join(self.zpfad,str(gmt[0]))
+                zp=os.path.join(zp,time.strftime('%Y-%m-%d',gmt))
+            #print zp
             if self.ForceDir(zp):
                 if self.cx_Rename.isChecked():
                     zdn=vorsilbe.lower()
@@ -153,6 +172,7 @@ class Download_Dlg(QtGui.QDialog, Dlg):
                         #Jetzt das Bild rotieren, falls möglich und nötig
                         os.system('exifautotran %s' % (zdn))
                     #self.anzeige('%s -> %s' % (qdn,zdn))
+                    #print gmt
                     self.anzeige('-> %s' % (zdn))
 
     def download_ein_Verzeichnis(self,data,dirname,filesindir):
@@ -212,6 +232,6 @@ class Download_Dlg(QtGui.QDialog, Dlg):
 
 if __name__ == '__main__':
   app = QtGui.QApplication(sys.argv)
-  dialog = Download_Dlg()
+  dialog = Download_Dlg(sys.argv)
   dialog.show()
   sys.exit(app.exec_())
