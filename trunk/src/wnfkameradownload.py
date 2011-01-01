@@ -136,15 +136,13 @@ class Download_Dlg(QtGui.QDialog, Dlg):
         qdn=os.path.join(dirname, dateiname)
         if os.path.isfile(qdn):
             ctm = os.stat(qdn)[ST_CTIME]
-            ctm = ctm + 60*60
-            gmt = time.gmtime(ctm)
-            #gmt = time.localtime(ctm) Das bringt schwierigkeiten wenn bilder vor der Sommerteit aufgenommen und da
+            gmt = time.gmtime(ctm+60*60)
             if (self.cx_Silvestermodus.isChecked() and gmt[3]<3):
                 ctm_vortag = ctm - (24*60*60)
-                gmt_vortag = time.gmtime(ctm_vortag)
-                #print "Silvester",gmt
+                gmt_vortag = time.gmtime(ctm_vortag+60*60)
                 zp=os.path.join(self.zpfad,str(gmt_vortag[0]))
                 zp=os.path.join(zp,time.strftime('%Y-%m-%d',gmt_vortag))
+                print "Silvester",zp
             else:
                 zp=os.path.join(self.zpfad,str(gmt[0]))
                 zp=os.path.join(zp,time.strftime('%Y-%m-%d',gmt))
@@ -173,7 +171,7 @@ class Download_Dlg(QtGui.QDialog, Dlg):
                         os.system('exifautotran %s' % (zdn))
                     #self.anzeige('%s -> %s' % (qdn,zdn))
                     #print gmt
-                    self.anzeige('-> %s' % (zdn))
+                    self.anzeige('-> %s' % (os.path.split(zdn)[1]))
 
     def download_ein_Verzeichnis(self,data,dirname,filesindir):
         #print (dirname)
