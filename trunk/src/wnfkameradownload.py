@@ -16,7 +16,7 @@ class Download_Dlg(QtGui.QDialog, Dlg):
     def __init__(self,args):
         QtGui.QDialog.__init__(self)
         self.setupUi(self)
-        self.setWindowTitle('wnfKameraDownload 1.04')
+        self.setWindowTitle('wnfKameraDownload 1.05')
         dn=self.paramStr(args,1)
         if dn=="":
             #oder es wird das Standard Ini-File verwendet
@@ -135,7 +135,11 @@ class Download_Dlg(QtGui.QDialog, Dlg):
         #qdn='%s%s' % (self.qpfad,dateiname)
         qdn=os.path.join(dirname, dateiname)
         if os.path.isfile(qdn):
-            ctm = os.stat(qdn)[ST_CTIME]
+            #ST_CTIME Creation Time
+            #ST_MTIME Modified Time
+            #ST_ATIME Access_Time
+            #23.01.2011 Stick von Christina braucht ST_MTIME
+            ctm = os.stat(qdn)[ST_MTIME]
             gmt = time.gmtime(ctm+60*60)
             if (self.cx_Silvestermodus.isChecked() and gmt[3]<3):
                 ctm_vortag = ctm - (24*60*60)
